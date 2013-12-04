@@ -24,8 +24,8 @@ mini (very mini) pascal compiler written using flex, bison, c and MIPS
 > Note: In Ubuntu, flex and bison can be installed using ```apt-get```  
 ```$sudo apt-get update```  
 ```$sudo apt-get upgrade ```  
-```$sudo apt-get install flex bison```
-
+```$sudo apt-get install flex bison```   
+---------------------------
 ---------------------------
 ###Important
 Keep in mind that the functionality is very limited. Simple statments such as if...then...else with basic integer relation operators, addition, multiplication, and division are all accepted

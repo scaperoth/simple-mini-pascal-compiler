@@ -120,8 +120,7 @@ declarations VAR identifier_list COLON type
 |IF expression THEN statement ELSE statement 
 {
   if(PRINT_ERRORS) printf("reducing statement: IF...THEN... ELSE\n");
-  fprintf(out,"\n\n### IF THEN ELSE ###\n");
-  fprintf(out, "lw\t$t0, ($sp)\t#pop 1st! (relop)\n");
+  fprintf(out, "lw\t$t0, ($sp)\t#pop 1st!\n");
 }
 |WHILE expression DO statement {if(PRINT_ERRORS) printf("reducing statement: WHILE...DO\n");}
 ;
@@ -200,46 +199,25 @@ simple_expression {if(PRINT_ERRORS) printf("reducing expression simple_expressio
 |simple_expression RELOP simple_expression {
   $$='i';if(PRINT_ERRORS) printf("reducing expression: simple_expression RELOP simple_expression\n");
   fprintf(out,"\n\n### PERFORMING RELOP ###\n");
-  fprintf(out, "lw\t$t2, ($sp)\t#pop 1st! (relop)\n");
+  fprintf(out, "lw\t$t2, ($sp)\t#pop 1st!\n");
 
-  fprintf(out, "addu\t$sp, $sp, 4\t#move the ptr (relop)\n");
+  fprintf(out, "addu\t$sp, $sp, 4\t#move the ptr\n");
   fprintf(out, "lw\t$t1, ($sp)\t#pop 2nd!\n");
-  fprintf(out, "subu\t$sp, $sp, 4\t#move the stack ptr\n");
 
   if(strcmp($2, "<")==0){
-    fprintf(out, "slt\t$t0, $t1,$t2\t#is it less than?\n");
-    fprintf(out, "BEQ \t$t0, 0,ELSE\t#go to else if not equal\n");
-    fprintf(out, "li\t$t0, 1\t#t0 holds 1\n");
-    fprintf(out, "j\tRES\t#jump to result!\n");
-    fprintf(out, "ELSE: li\t$t0, 0\t#t0 holds 0\n");
-    fprintf(out, "RES: sw\t$t0, ($sp)\t#push!\n");
+    fprintf(out, "sge\t$t0, $t1, $t2\t#is it less than?\n");
   }
   else if(strcmp($2, ">")==0){
-    fprintf(out, "slt\t$t0, $t2,$t1\t#is it greater than?\n");
-    fprintf(out, "BEQ \t$t0, 0,ELSE\t#go to else if not equal\n");
-    fprintf(out, "li\t$t0, 1\t#t0 holds 1\n");
-    fprintf(out, "j\tRES\t#jump to result!\n");
-    fprintf(out, "ELSE: li\t$t0, 0\t#t0 holds 0\n");
-    fprintf(out, "RES: sw\t$t0, ($sp)\t#push!\n");
+    fprintf(out, "sle \t$t0, $t1, $t2\t#is it less than?\n");
   }
   else if(strcmp($2, "<=")==0){
-    fprintf(out, "BEQ\t$t1,$t2, IF\t#is it equal?\n");
-    fprintf(out, "slt\t$t0, $t1,$t2\t#is it less than?\n");
-    fprintf(out, "BEQ \t$t0, 0,ELSE\t#go to else if not equal\n");
-    fprintf(out, "IF: li\t$t0, 1\t#t0 holds 1\n");
-    fprintf(out, "j\tRES\t#jump to result!\n");
-    fprintf(out, "ELSE: li\t$t0, 0\t#t0 holds 0\n");
-    fprintf(out, "RES: sw\t$t0, ($sp)\t#push!\n");
+    fprintf(out, "sgt\t$t0, $t1, $t2\t#is it less than?\n");
   }
   else if(strcmp($2, ">=")==0){
-    fprintf(out, "BEQ\t$t1,$t2, IF\t#is it equal?\n");
-    fprintf(out, "slt\t$t0, $t2,$t1\t#is it greater than?\n");
-    fprintf(out, "BEQ \t$t0, 0,ELSE\t#go to else if not equal\n");
-    fprintf(out, "IF: li\t$t0, 1\t#t0 holds 1\n");
-    fprintf(out, "j\tRES\t#jump to result!\n");
-    fprintf(out, "ELSE: li\t$t0, 0\t#t0 holds 0\n");
-    fprintf(out, "RES: sw\t$t0, ($sp)\t#push!\n");
+    fprintf(out, "slt\t$t0, $t1, $t2\t#is it less than?\n");
   }
+
+  fprintf(out, "subu\t$sp, $sp, 4\t#move the stack ptr\n");
   fprintf(out, "sw\t$t0, ($sp)\t#push!\n");
 }
 ;

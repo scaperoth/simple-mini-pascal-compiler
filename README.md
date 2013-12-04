@@ -22,7 +22,6 @@ mini (very mini) pascal compiler written using flex, bison, c and MIPS
   - open the *.s file and hit ```f3``` to assemble the code then ```f5``` to run it
 
 > Note: In Ubuntu, flex and bison can be installed using ```apt-get```  
-
 ```$sudo apt-get update```  
 ```$sudo apt-get upgrade ```  
 ```$sudo apt-get install flex bison```

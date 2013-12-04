@@ -11,6 +11,14 @@ mini (very mini) pascal compiler written using flex, bison, c and MIPS
 - once this file is generated you can run it in Mars to execute your code!
 
 ###Dependencies
+*Instructions on how to download the first two can be found relatively easily online*
 
-flex and bison 
-[mars](google.com)
+- flex 
+- bison
+In Ubuntu, flex and bison can be installed using ```apt-get```
+```
+sudo apt-get update 
+sudo apt-get upgrade 
+sudo apt-get install flex bison
+```
+- [mars](http://courses.missouristate.edu/KenVollmar/MARS/download.htm)

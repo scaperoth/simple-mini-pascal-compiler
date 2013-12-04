@@ -4,7 +4,6 @@ simple-mini-pascal-compiler
 mini (very mini) pascal compiler written using flex, bison, c and MIPS
 
 ###How to use this
------------------------------
 - install flex and bison if you haven't already
   (*Google search "install flex and bison" if you are having trouble*)
 - run ```make```
@@ -12,7 +11,6 @@ mini (very mini) pascal compiler written using flex, bison, c and MIPS
 - the output of this will tell you if your file is syntactically correct and will generate a "nameoftestfile.s" file
 - once this file is generated you can run it in Mars to execute your code!
 
-----------------------------
 
 ###Dependencies
 -----------------------------

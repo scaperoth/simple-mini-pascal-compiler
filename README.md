@@ -3,6 +3,13 @@ simple-mini-pascal-compiler
 
 mini (very mini) pascal compiler written using flex, bison, c and MIPS
 
+Keep in mind that the functionality is very limited. Simple statments such as if...then...else with basic integer relation operators, addition, multiplication, and division are all accepted
+
+#####TODO
+Currently it does not support while loops.   
+Nesting if...then...else logic not been tested.
+String and character manipulation is unsupported (or at least untested).
+
 ###How to use this
 -----------------------------
 - install flex and bison if you haven't already

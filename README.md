@@ -5,7 +5,8 @@ mini (very mini) pascal compiler written using flex, bison, c and MIPS
 
 ###How to use this
 -----------------------------
-- install flex and bison if you don't already have them *Google search "install flex and bison" if you are having trouble*
+- install flex and bison if you don't already have them  
+  *Google search "install flex and bison" if you are having trouble*
 - run ```make```
 - using the test files run ```./project3.2 /optionalpath/nameoftestfile.pas```
 - the output of this will tell you if your file is syntactically correct and will generate a "nameoftestfile.s" file

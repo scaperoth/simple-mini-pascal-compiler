@@ -1,0 +1,896 @@
+Terminals which are not used
+
+   DIVOP
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 @1: /* empty */
+
+    2 @2: /* empty */
+
+    3 @3: /* empty */
+
+    4 program: PROGRAM ID @1 OPAR identifier_list @2 CPAR SEMICOLON declarations @3 compound_statement DOT
+
+    5 identifier_list: ID
+    6                | identifier_list COMMA ID
+
+    7 @4: /* empty */
+
+    8 declarations: declarations VAR identifier_list COLON type @4 SEMICOLON
+    9             | /* empty */
+
+   10 type: INTEGER
+   11     | REAL
+
+   12 compound_statement: BEGINS optional_statements END
+
+   13 optional_statements: statement_list
+   14                    | /* empty */
+
+   15 statement_list: statement
+   16               | statement_list SEMICOLON statement
+
+   17 statement: ID ASSIGNOP expression
+   18          | procedure_statement
+   19          | compound_statement
+   20          | IF expression THEN statement ELSE statement
+   21          | WHILE expression DO statement
+
+   22 procedure_statement: ID
+   23                    | ID OPAR expression_list CPAR
+
+   24 expression_list: expression
+   25                | expression_list COMMA expression
+
+   26 expression: simple_expression
+   27           | simple_expression RELOP simple_expression
+
+   28 simple_expression: term
+   29                  | sign term
+   30                  | simple_expression ADDOP term
+
+   31 term: factor
+   32     | term MULOP factor
+
+   33 factor: ID
+   34       | ID OPAR expression_list CPAR
+   35       | INTNO
+   36       | REALNO
+   37       | OPAR expression CPAR
+   38       | NOT factor
+
+   39 sign: ADDOP
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+ASSIGNOP (258) 17
+DIVOP (259)
+OPAR (260) 4 23 34 37
+CPAR (261) 4 23 34 37
+DOT (262) 4
+COMMA (263) 6 25
+SEMICOLON (264) 4 8 16
+COLON (265) 8
+VAR (266) 8
+REAL (267) 11
+BEGINS (268) 12
+END (269) 12
+PROGRAM (270) 4
+DO (271) 21
+WHILE (272) 21
+IF (273) 20
+THEN (274) 20
+ELSE (275) 20
+NOT (276) 38
+ADDOP (277) 30 39
+MULOP (278) 32
+RELOP (279) 27
+INTEGER (280) 10
+INTNO (281) 35
+REALNO (282) 36
+ID (283) 4 5 6 17 22 23 33 34
+
+
+Nonterminals, with rules where they appear
+
+$accept (29)
+    on left: 0
+program (30)
+    on left: 4, on right: 0
+@1 (31)
+    on left: 1, on right: 4
+@2 (32)
+    on left: 2, on right: 4
+@3 (33)
+    on left: 3, on right: 4
+identifier_list (34)
+    on left: 5 6, on right: 4 6 8
+declarations (35)
+    on left: 8 9, on right: 4 8
+@4 (36)
+    on left: 7, on right: 8
+type (37)
+    on left: 10 11, on right: 8
+compound_statement (38)
+    on left: 12, on right: 4 19
+optional_statements (39)
+    on left: 13 14, on right: 12
+statement_list (40)
+    on left: 15 16, on right: 13 16
+statement (41)
+    on left: 17 18 19 20 21, on right: 15 16 20 21
+procedure_statement (42)
+    on left: 22 23, on right: 18
+expression_list (43)
+    on left: 24 25, on right: 23 25 34
+expression (44)
+    on left: 26 27, on right: 17 20 21 24 25 37
+simple_expression (45)
+    on left: 28 29 30, on right: 26 27 30
+term (46)
+    on left: 31 32, on right: 28 29 30 32
+factor (47)
+    on left: 33 34 35 36 37 38, on right: 31 32 38
+sign (48)
+    on left: 39, on right: 29
+
+
+state 0
+
+    0 $accept: . program $end
+
+    PROGRAM  shift, and go to state 1
+
+    program  go to state 2
+
+
+state 1
+
+    4 program: PROGRAM . ID @1 OPAR identifier_list @2 CPAR SEMICOLON declarations @3 compound_statement DOT
+
+    ID  shift, and go to state 3
+
+
+state 2
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 4
+
+
+state 3
+
+    4 program: PROGRAM ID . @1 OPAR identifier_list @2 CPAR SEMICOLON declarations @3 compound_statement DOT
+
+    $default  reduce using rule 1 (@1)
+
+    @1  go to state 5
+
+
+state 4
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+state 5
+
+    4 program: PROGRAM ID @1 . OPAR identifier_list @2 CPAR SEMICOLON declarations @3 compound_statement DOT
+
+    OPAR  shift, and go to state 6
+
+
+state 6
+
+    4 program: PROGRAM ID @1 OPAR . identifier_list @2 CPAR SEMICOLON declarations @3 compound_statement DOT
+
+    ID  shift, and go to state 7
+
+    identifier_list  go to state 8
+
+
+state 7
+
+    5 identifier_list: ID .
+
+    $default  reduce using rule 5 (identifier_list)
+
+
+state 8
+
+    4 program: PROGRAM ID @1 OPAR identifier_list . @2 CPAR SEMICOLON declarations @3 compound_statement DOT
+    6 identifier_list: identifier_list . COMMA ID
+
+    COMMA  shift, and go to state 9
+
+    $default  reduce using rule 2 (@2)
+
+    @2  go to state 10
+
+
+state 9
+
+    6 identifier_list: identifier_list COMMA . ID
+
+    ID  shift, and go to state 11
+
+
+state 10
+
+    4 program: PROGRAM ID @1 OPAR identifier_list @2 . CPAR SEMICOLON declarations @3 compound_statement DOT
+
+    CPAR  shift, and go to state 12
+
+
+state 11
+
+    6 identifier_list: identifier_list COMMA ID .
+
+    $default  reduce using rule 6 (identifier_list)
+
+
+state 12
+
+    4 program: PROGRAM ID @1 OPAR identifier_list @2 CPAR . SEMICOLON declarations @3 compound_statement DOT
+
+    SEMICOLON  shift, and go to state 13
+
+
+state 13
+
+    4 program: PROGRAM ID @1 OPAR identifier_list @2 CPAR SEMICOLON . declarations @3 compound_statement DOT
+
+    $default  reduce using rule 9 (declarations)
+
+    declarations  go to state 14
+
+
+state 14
+
+    4 program: PROGRAM ID @1 OPAR identifier_list @2 CPAR SEMICOLON declarations . @3 compound_statement DOT
+    8 declarations: declarations . VAR identifier_list COLON type @4 SEMICOLON
+
+    VAR  shift, and go to state 15
+
+    $default  reduce using rule 3 (@3)
+
+    @3  go to state 16
+
+
+state 15
+
+    8 declarations: declarations VAR . identifier_list COLON type @4 SEMICOLON
+
+    ID  shift, and go to state 7
+
+    identifier_list  go to state 17
+
+
+state 16
+
+    4 program: PROGRAM ID @1 OPAR identifier_list @2 CPAR SEMICOLON declarations @3 . compound_statement DOT
+
+    BEGINS  shift, and go to state 18
+
+    compound_statement  go to state 19
+
+
+state 17
+
+    6 identifier_list: identifier_list . COMMA ID
+    8 declarations: declarations VAR identifier_list . COLON type @4 SEMICOLON
+
+    COMMA  shift, and go to state 9
+    COLON  shift, and go to state 20
+
+
+state 18
+
+   12 compound_statement: BEGINS . optional_statements END
+
+    BEGINS  shift, and go to state 18
+    WHILE   shift, and go to state 21
+    IF      shift, and go to state 22
+    ID      shift, and go to state 23
+
+    $default  reduce using rule 14 (optional_statements)
+
+    compound_statement   go to state 24
+    optional_statements  go to state 25
+    statement_list       go to state 26
+    statement            go to state 27
+    procedure_statement  go to state 28
+
+
+state 19
+
+    4 program: PROGRAM ID @1 OPAR identifier_list @2 CPAR SEMICOLON declarations @3 compound_statement . DOT
+
+    DOT  shift, and go to state 29
+
+
+state 20
+
+    8 declarations: declarations VAR identifier_list COLON . type @4 SEMICOLON
+
+    REAL     shift, and go to state 30
+    INTEGER  shift, and go to state 31
+
+    type  go to state 32
+
+
+state 21
+
+   21 statement: WHILE . expression DO statement
+
+    OPAR    shift, and go to state 33
+    NOT     shift, and go to state 34
+    ADDOP   shift, and go to state 35
+    INTNO   shift, and go to state 36
+    REALNO  shift, and go to state 37
+    ID      shift, and go to state 38
+
+    expression         go to state 39
+    simple_expression  go to state 40
+    term               go to state 41
+    factor             go to state 42
+    sign               go to state 43
+
+
+state 22
+
+   20 statement: IF . expression THEN statement ELSE statement
+
+    OPAR    shift, and go to state 33
+    NOT     shift, and go to state 34
+    ADDOP   shift, and go to state 35
+    INTNO   shift, and go to state 36
+    REALNO  shift, and go to state 37
+    ID      shift, and go to state 38
+
+    expression         go to state 44
+    simple_expression  go to state 40
+    term               go to state 41
+    factor             go to state 42
+    sign               go to state 43
+
+
+state 23
+
+   17 statement: ID . ASSIGNOP expression
+   22 procedure_statement: ID .
+   23                    | ID . OPAR expression_list CPAR
+
+    ASSIGNOP  shift, and go to state 45
+    OPAR      shift, and go to state 46
+
+    $default  reduce using rule 22 (procedure_statement)
+
+
+state 24
+
+   19 statement: compound_statement .
+
+    $default  reduce using rule 19 (statement)
+
+
+state 25
+
+   12 compound_statement: BEGINS optional_statements . END
+
+    END  shift, and go to state 47
+
+
+state 26
+
+   13 optional_statements: statement_list .
+   16 statement_list: statement_list . SEMICOLON statement
+
+    SEMICOLON  shift, and go to state 48
+
+    $default  reduce using rule 13 (optional_statements)
+
+
+state 27
+
+   15 statement_list: statement .
+
+    $default  reduce using rule 15 (statement_list)
+
+
+state 28
+
+   18 statement: procedure_statement .
+
+    $default  reduce using rule 18 (statement)
+
+
+state 29
+
+    4 program: PROGRAM ID @1 OPAR identifier_list @2 CPAR SEMICOLON declarations @3 compound_statement DOT .
+
+    $default  reduce using rule 4 (program)
+
+
+state 30
+
+   11 type: REAL .
+
+    $default  reduce using rule 11 (type)
+
+
+state 31
+
+   10 type: INTEGER .
+
+    $default  reduce using rule 10 (type)
+
+
+state 32
+
+    8 declarations: declarations VAR identifier_list COLON type . @4 SEMICOLON
+
+    $default  reduce using rule 7 (@4)
+
+    @4  go to state 49
+
+
+state 33
+
+   37 factor: OPAR . expression CPAR
+
+    OPAR    shift, and go to state 33
+    NOT     shift, and go to state 34
+    ADDOP   shift, and go to state 35
+    INTNO   shift, and go to state 36
+    REALNO  shift, and go to state 37
+    ID      shift, and go to state 38
+
+    expression         go to state 50
+    simple_expression  go to state 40
+    term               go to state 41
+    factor             go to state 42
+    sign               go to state 43
+
+
+state 34
+
+   38 factor: NOT . factor
+
+    OPAR    shift, and go to state 33
+    NOT     shift, and go to state 34
+    INTNO   shift, and go to state 36
+    REALNO  shift, and go to state 37
+    ID      shift, and go to state 38
+
+    factor  go to state 51
+
+
+state 35
+
+   39 sign: ADDOP .
+
+    $default  reduce using rule 39 (sign)
+
+
+state 36
+
+   35 factor: INTNO .
+
+    $default  reduce using rule 35 (factor)
+
+
+state 37
+
+   36 factor: REALNO .
+
+    $default  reduce using rule 36 (factor)
+
+
+state 38
+
+   33 factor: ID .
+   34       | ID . OPAR expression_list CPAR
+
+    OPAR  shift, and go to state 52
+
+    $default  reduce using rule 33 (factor)
+
+
+state 39
+
+   21 statement: WHILE expression . DO statement
+
+    DO  shift, and go to state 53
+
+
+state 40
+
+   26 expression: simple_expression .
+   27           | simple_expression . RELOP simple_expression
+   30 simple_expression: simple_expression . ADDOP term
+
+    ADDOP  shift, and go to state 54
+    RELOP  shift, and go to state 55
+
+    $default  reduce using rule 26 (expression)
+
+
+state 41
+
+   28 simple_expression: term .
+   32 term: term . MULOP factor
+
+    MULOP  shift, and go to state 56
+
+    $default  reduce using rule 28 (simple_expression)
+
+
+state 42
+
+   31 term: factor .
+
+    $default  reduce using rule 31 (term)
+
+
+state 43
+
+   29 simple_expression: sign . term
+
+    OPAR    shift, and go to state 33
+    NOT     shift, and go to state 34
+    INTNO   shift, and go to state 36
+    REALNO  shift, and go to state 37
+    ID      shift, and go to state 38
+
+    term    go to state 57
+    factor  go to state 42
+
+
+state 44
+
+   20 statement: IF expression . THEN statement ELSE statement
+
+    THEN  shift, and go to state 58
+
+
+state 45
+
+   17 statement: ID ASSIGNOP . expression
+
+    OPAR    shift, and go to state 33
+    NOT     shift, and go to state 34
+    ADDOP   shift, and go to state 35
+    INTNO   shift, and go to state 36
+    REALNO  shift, and go to state 37
+    ID      shift, and go to state 38
+
+    expression         go to state 59
+    simple_expression  go to state 40
+    term               go to state 41
+    factor             go to state 42
+    sign               go to state 43
+
+
+state 46
+
+   23 procedure_statement: ID OPAR . expression_list CPAR
+
+    OPAR    shift, and go to state 33
+    NOT     shift, and go to state 34
+    ADDOP   shift, and go to state 35
+    INTNO   shift, and go to state 36
+    REALNO  shift, and go to state 37
+    ID      shift, and go to state 38
+
+    expression_list    go to state 60
+    expression         go to state 61
+    simple_expression  go to state 40
+    term               go to state 41
+    factor             go to state 42
+    sign               go to state 43
+
+
+state 47
+
+   12 compound_statement: BEGINS optional_statements END .
+
+    $default  reduce using rule 12 (compound_statement)
+
+
+state 48
+
+   16 statement_list: statement_list SEMICOLON . statement
+
+    BEGINS  shift, and go to state 18
+    WHILE   shift, and go to state 21
+    IF      shift, and go to state 22
+    ID      shift, and go to state 23
+
+    compound_statement   go to state 24
+    statement            go to state 62
+    procedure_statement  go to state 28
+
+
+state 49
+
+    8 declarations: declarations VAR identifier_list COLON type @4 . SEMICOLON
+
+    SEMICOLON  shift, and go to state 63
+
+
+state 50
+
+   37 factor: OPAR expression . CPAR
+
+    CPAR  shift, and go to state 64
+
+
+state 51
+
+   38 factor: NOT factor .
+
+    $default  reduce using rule 38 (factor)
+
+
+state 52
+
+   34 factor: ID OPAR . expression_list CPAR
+
+    OPAR    shift, and go to state 33
+    NOT     shift, and go to state 34
+    ADDOP   shift, and go to state 35
+    INTNO   shift, and go to state 36
+    REALNO  shift, and go to state 37
+    ID      shift, and go to state 38
+
+    expression_list    go to state 65
+    expression         go to state 61
+    simple_expression  go to state 40
+    term               go to state 41
+    factor             go to state 42
+    sign               go to state 43
+
+
+state 53
+
+   21 statement: WHILE expression DO . statement
+
+    BEGINS  shift, and go to state 18
+    WHILE   shift, and go to state 21
+    IF      shift, and go to state 22
+    ID      shift, and go to state 23
+
+    compound_statement   go to state 24
+    statement            go to state 66
+    procedure_statement  go to state 28
+
+
+state 54
+
+   30 simple_expression: simple_expression ADDOP . term
+
+    OPAR    shift, and go to state 33
+    NOT     shift, and go to state 34
+    INTNO   shift, and go to state 36
+    REALNO  shift, and go to state 37
+    ID      shift, and go to state 38
+
+    term    go to state 67
+    factor  go to state 42
+
+
+state 55
+
+   27 expression: simple_expression RELOP . simple_expression
+
+    OPAR    shift, and go to state 33
+    NOT     shift, and go to state 34
+    ADDOP   shift, and go to state 35
+    INTNO   shift, and go to state 36
+    REALNO  shift, and go to state 37
+    ID      shift, and go to state 38
+
+    simple_expression  go to state 68
+    term               go to state 41
+    factor             go to state 42
+    sign               go to state 43
+
+
+state 56
+
+   32 term: term MULOP . factor
+
+    OPAR    shift, and go to state 33
+    NOT     shift, and go to state 34
+    INTNO   shift, and go to state 36
+    REALNO  shift, and go to state 37
+    ID      shift, and go to state 38
+
+    factor  go to state 69
+
+
+state 57
+
+   29 simple_expression: sign term .
+   32 term: term . MULOP factor
+
+    MULOP  shift, and go to state 56
+
+    $default  reduce using rule 29 (simple_expression)
+
+
+state 58
+
+   20 statement: IF expression THEN . statement ELSE statement
+
+    BEGINS  shift, and go to state 18
+    WHILE   shift, and go to state 21
+    IF      shift, and go to state 22
+    ID      shift, and go to state 23
+
+    compound_statement   go to state 24
+    statement            go to state 70
+    procedure_statement  go to state 28
+
+
+state 59
+
+   17 statement: ID ASSIGNOP expression .
+
+    $default  reduce using rule 17 (statement)
+
+
+state 60
+
+   23 procedure_statement: ID OPAR expression_list . CPAR
+   25 expression_list: expression_list . COMMA expression
+
+    CPAR   shift, and go to state 71
+    COMMA  shift, and go to state 72
+
+
+state 61
+
+   24 expression_list: expression .
+
+    $default  reduce using rule 24 (expression_list)
+
+
+state 62
+
+   16 statement_list: statement_list SEMICOLON statement .
+
+    $default  reduce using rule 16 (statement_list)
+
+
+state 63
+
+    8 declarations: declarations VAR identifier_list COLON type @4 SEMICOLON .
+
+    $default  reduce using rule 8 (declarations)
+
+
+state 64
+
+   37 factor: OPAR expression CPAR .
+
+    $default  reduce using rule 37 (factor)
+
+
+state 65
+
+   25 expression_list: expression_list . COMMA expression
+   34 factor: ID OPAR expression_list . CPAR
+
+    CPAR   shift, and go to state 73
+    COMMA  shift, and go to state 72
+
+
+state 66
+
+   21 statement: WHILE expression DO statement .
+
+    $default  reduce using rule 21 (statement)
+
+
+state 67
+
+   30 simple_expression: simple_expression ADDOP term .
+   32 term: term . MULOP factor
+
+    MULOP  shift, and go to state 56
+
+    $default  reduce using rule 30 (simple_expression)
+
+
+state 68
+
+   27 expression: simple_expression RELOP simple_expression .
+   30 simple_expression: simple_expression . ADDOP term
+
+    ADDOP  shift, and go to state 54
+
+    $default  reduce using rule 27 (expression)
+
+
+state 69
+
+   32 term: term MULOP factor .
+
+    $default  reduce using rule 32 (term)
+
+
+state 70
+
+   20 statement: IF expression THEN statement . ELSE statement
+
+    ELSE  shift, and go to state 74
+
+
+state 71
+
+   23 procedure_statement: ID OPAR expression_list CPAR .
+
+    $default  reduce using rule 23 (procedure_statement)
+
+
+state 72
+
+   25 expression_list: expression_list COMMA . expression
+
+    OPAR    shift, and go to state 33
+    NOT     shift, and go to state 34
+    ADDOP   shift, and go to state 35
+    INTNO   shift, and go to state 36
+    REALNO  shift, and go to state 37
+    ID      shift, and go to state 38
+
+    expression         go to state 75
+    simple_expression  go to state 40
+    term               go to state 41
+    factor             go to state 42
+    sign               go to state 43
+
+
+state 73
+
+   34 factor: ID OPAR expression_list CPAR .
+
+    $default  reduce using rule 34 (factor)
+
+
+state 74
+
+   20 statement: IF expression THEN statement ELSE . statement
+
+    BEGINS  shift, and go to state 18
+    WHILE   shift, and go to state 21
+    IF      shift, and go to state 22
+    ID      shift, and go to state 23
+
+    compound_statement   go to state 24
+    statement            go to state 76
+    procedure_statement  go to state 28
+
+
+state 75
+
+   25 expression_list: expression_list COMMA expression .
+
+    $default  reduce using rule 25 (expression_list)
+
+
+state 76
+
+   20 statement: IF expression THEN statement ELSE statement .
+
+    $default  reduce using rule 20 (statement)

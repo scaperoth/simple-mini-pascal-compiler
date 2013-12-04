@@ -13,12 +13,11 @@ mini (very mini) pascal compiler written using flex, bison, c and MIPS
 ###Dependencies
 *Instructions on how to download the first two can be found relatively easily online*  
 
-> In Ubuntu, flex and bison can be installed using ```apt-get```  
+- flex 
+- bison  
+- [mars](http://courses.missouristate.edu/KenVollmar/MARS/download.htm)
+
+> Note: In Ubuntu, flex and bison can be installed using ```apt-get```  
 ```$sudo apt-get update```  
 ```$sudo apt-get upgrade ```  
 ```$sudo apt-get install flex bison```
-
-- flex 
-- bison  
-
-- [mars](http://courses.missouristate.edu/KenVollmar/MARS/download.htm)

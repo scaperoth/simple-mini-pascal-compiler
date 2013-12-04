@@ -7,7 +7,7 @@ Keep in mind that the functionality is very limited. Simple statments such as if
 
 #####TODO
 Currently it does not support while loops.   
-Nesting if...then...else logic not been tested.
+Nesting if...then...else logic not been tested.  
 String and character manipulation is unsupported (or at least untested).
 
 ###How to use this

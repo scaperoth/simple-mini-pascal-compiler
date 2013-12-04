@@ -1,7 +1,7 @@
 /***********************************************
 |@author Matt Scaperoth
 |@hash.h contains all functions for project 2
-|@project Project 3.1
+|@project Project 3.2
 |@purpose: To successfully handle parsing a program
 |     into a hash table where logic can be 
 |     completed on the values when they appear

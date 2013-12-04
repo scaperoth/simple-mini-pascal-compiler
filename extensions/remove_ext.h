@@ -8,6 +8,7 @@
 
 /**
  * @author paxdiablo@stackoverflow.com
+ * @source http://stackoverflow.com/questions/2736753/how-to-remove-extension-from-file-name
  */
 // remove_ext: removes the "extension" from a file spec.
 //   mystr is the string to process.

@@ -7,6 +7,7 @@ CFLAGS = -lfl -o
 LEX = scanner.l
 PARSE = parser.y
 PARSEFLAGS = -v -d
+REMOVEFILES = parser.tab.* lex.yy.* $(PROJNAME)$(SUBVERSION) *.s *.output
 
 $(PROJNAME)$(SUBVERSION): $(OBJ)
 	$(CC) parser.tab.c lex.yy.c $(CFLAGS) $@
@@ -19,4 +20,4 @@ lex.yy.o: $(LEX)
 	flex $(LEX)
 
 clean: 
-	rm parser.tab.* lex.yy.* $(PROJNAME)$(SUBVERSION) *.s *.output 
+	rm -f $(REMOVEFILES)

@@ -1,10 +1,12 @@
 %{
 /*
  * @author: Matt Scaperoth
- * Project 3.1
+ * Project 3.2
  * File: parser.y
  * Class: CSCI 3313-10 FA13
- * 
+ *
+ * ASSUMPTION: Used available code from StackOverflow to handle removing the extension from 
+ * the file name so that i can create a new .s file. The author is properly credited with its creation.
  */
  #include "hash.h"
  #include "extensions/remove_ext.h"
@@ -15,7 +17,7 @@
    fprintf (stderr, "%s\n", s); 
  }
 
-
+int ifthenelsecounter;
 
  %}
  %union semrec{
@@ -50,6 +52,7 @@
  fprintf(out, "user_input: .word 0\n");
  fprintf(out, "readspace: .asciiz \"read: \"\n");
  fprintf(out, "writespace: .asciiz \"write: \"\n");
+ fprintf(out, "here: .asciiz \":here: \"\n");
  fprintf(out, "space: .asciiz \"\\n\"\n");
 
  } OPAR identifier_list {add_type_and_pop_all('g',0);} CPAR SEMICOLON
@@ -108,21 +111,29 @@ declarations VAR identifier_list COLON type
   fprintf(out, "lw\t$t0, ($sp)\t#pop 1st!\n");
   fprintf(out, "addu\t$sp, $sp, 4\t#move the ptr\n");
   fprintf(out, "sw\t$t0, %s\t#add value to variable\n",$1);
-/*print message
-  fprintf(out,"\n\n### PRINT THE ASSIGNMENT MESSAGE ###\n");
-  fprintf(out,"li\t$v0, 4\t#print instruction\n");
-  fprintf(out,"la\t$a0, emsg\t#put the message to be print\n");
-  fprintf(out,"syscall\t\n");
-  */
+  
 }
 |procedure_statement {if(PRINT_ERRORS) printf("reducing statement: procedure_statement\n");}
 |compound_statement {if(PRINT_ERRORS) printf("reducing statement: compound_statement\n");}
-|IF expression THEN statement ELSE statement 
-{
+|IF expression THEN{
+
+  fprintf(out, "\n\n###GET VALUE FROM EXPRESSION###\n");
+  fprintf(out, "move\t$t2, $t0\t#get result form expression\n");
+  fprintf(out, "beq\t$t2, 0, ELSE\t#JUMP to tag if exp is false\n");
+
+}statement ELSE{
+
+  fprintf(out, "\n\n###USE EXPRESSION VALUE###\n");
+  fprintf(out, "beq\t$t2, 1, STOPTRUE\t#get result form expression\n");
+  fprintf(out, "ELSE: \t#ELSE Label\n",0);
+
+}statement{
+
   if(PRINT_ERRORS) printf("reducing statement: IF...THEN... ELSE\n");
-  fprintf(out, "lw\t$t0, ($sp)\t#pop 1st!\n");
-}
-|WHILE expression DO statement {if(PRINT_ERRORS) printf("reducing statement: WHILE...DO\n");}
+  fprintf(out, "\n\nSTOPTRUE: #finished\n");
+  fprintf(out, "###End IF...THEN...ELSE###\n");
+
+}|WHILE expression DO statement {if(PRINT_ERRORS) printf("reducing statement: WHILE...DO\n");}
 ;
 
 procedure_statement:
@@ -148,6 +159,10 @@ ID {/*$$=symbol_is_declared($1);*/if(PRINT_ERRORS) printf("reducing procedure_st
     }
     
     fprintf(out,"syscall\t\n");
+
+    fprintf(out, "lw\t$t1, ($sp)\t#pop 1st! done with the variable\n");
+    fprintf(out, "addu\t$sp, $sp, 4\t#move the ptr\n");
+
     fprintf(out, "sw\t$v0, ($t0)\t#add value to variable\n");
 
     /*
@@ -166,6 +181,7 @@ ID {/*$$=symbol_is_declared($1);*/if(PRINT_ERRORS) printf("reducing procedure_st
     fprintf(out,"syscall\t\n"); 
 
     fprintf(out, "lw\t$t0, ($sp)\t#pop 1st!\n");
+    fprintf(out, "addu\t$sp, $sp, 4\t#move the ptr\n");
 
     switch($3){
       case 'i':
@@ -199,26 +215,25 @@ simple_expression {if(PRINT_ERRORS) printf("reducing expression simple_expressio
 |simple_expression RELOP simple_expression {
   $$='i';if(PRINT_ERRORS) printf("reducing expression: simple_expression RELOP simple_expression\n");
   fprintf(out,"\n\n### PERFORMING RELOP ###\n");
-  fprintf(out, "lw\t$t2, ($sp)\t#pop 1st!\n");
-
+  fprintf(out, "lw\t$t1, ($sp)\t#pop 1st!\n");
   fprintf(out, "addu\t$sp, $sp, 4\t#move the ptr\n");
-  fprintf(out, "lw\t$t1, ($sp)\t#pop 2nd!\n");
+  fprintf(out, "lw\t$t0, ($sp)\t#pop 2nd!\n");
+  fprintf(out, "addu\t$sp, $sp, 4\t#move the ptr\n");
 
   if(strcmp($2, "<")==0){
-    fprintf(out, "sge\t$t0, $t1, $t2\t#is it less than?\n");
+    fprintf(out, "slt\t$t0, $t0, $t1\t#is it less than?\n");
   }
   else if(strcmp($2, ">")==0){
-    fprintf(out, "sle \t$t0, $t1, $t2\t#is it less than?\n");
+    fprintf(out, "sgt \t$t0, $t0, $t1\t#is it less than?\n");
   }
   else if(strcmp($2, "<=")==0){
-    fprintf(out, "sgt\t$t0, $t1, $t2\t#is it less than?\n");
+    fprintf(out, "sle\t$t0, $t0, $t1\t#is it less than or equal?\n");
   }
   else if(strcmp($2, ">=")==0){
-    fprintf(out, "slt\t$t0, $t1, $t2\t#is it less than?\n");
+    fprintf(out, "sge\t$t0, $t0, $t1\t#is it greater than or equal?\n");
   }
 
-  fprintf(out, "subu\t$sp, $sp, 4\t#move the stack ptr\n");
-  fprintf(out, "sw\t$t0, ($sp)\t#push!\n");
+
 }
 ;
 
@@ -228,11 +243,8 @@ term {if(PRINT_ERRORS) printf("reducing simple_expression term\n");}
 |simple_expression ADDOP term {if($1 == 'r' || $3 == 'r')$$ = 'r'; else $$='i'; if(PRINT_ERRORS) printf("reducing simple_expression: simple_expression ADDOP term\n");
 fprintf(out,"\n\n### PERFORMING ADDITION ###\n");
 fprintf(out, "lw\t$t0, ($sp)\t#pop 1st!\n");
-
 fprintf(out, "addu\t$sp, $sp, 4\t#move the ptr\n");
 fprintf(out, "lw\t$t1, ($sp)\t#pop 2nd!\n");
-
-
 fprintf(out, "addu\t$sp, $sp, 4\t#move the ptr\n");
 
 switch($2){
@@ -302,9 +314,9 @@ fprintf(out, "sw\t$t0, ($sp)\t#push!\n");
 factor:
 ID {$$=symbol_is_declared($1);if(PRINT_ERRORS) printf("reducing factor: ID\n");
 fprintf(out, "\n\n### ADDING AN ID TO THE STACK ####\n");
-fprintf(out, "lw\t $t0, %s\t #store value from id into t0\n",$1);
-fprintf(out, "subu\t $sp, $sp, 4\t #move the stack ptr\n");
-fprintf(out, "sw\t $t0, ($sp)\t #push!\n");
+fprintf(out, "lw\t$t0, %s\t #store value from id into t0\n",$1);
+fprintf(out, "subu\t$sp, $sp, 4\t#move the stack ptr\n");
+fprintf(out, "sw\t$t0, ($sp)\t#push!\n");
 fprintf(out, "la\t$t0, %s\t #load address of var into t0",$1);
 }
 |ID OPAR expression_list CPAR {if(PRINT_ERRORS) printf("reducing factor: ID OPAR expression_list CPAR\n");

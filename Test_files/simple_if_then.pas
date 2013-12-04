@@ -7,10 +7,10 @@ begin
 read(x) ;
 read(y) ;
 
-if (x>=y) then
-   greater := x
+if (x<=y) then
+   greater := 33
 else
-   greater := y;
+   greater := 444;
 
 write (greater)
 

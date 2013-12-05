@@ -3,7 +3,7 @@ simple-mini-pascal-compiler
 
 mini (very mini) pascal compiler written using flex, bison, c and MIPS
 
-###How To
+###Instructions
 - install flex and bison if you haven't already
   (*Google search "install flex and bison" if you are having trouble*)
 - run ```make```
